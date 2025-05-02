@@ -191,25 +191,22 @@
             /* Slight zoom on hover */
         }
 
-        */ .confirmation-popup {
-            position: absolute;
-            /* Ensure it's positioned relative to the nearest positioned ancestor (.chairs-container) */
-            top: 50%;
-            /* Position the top edge at the vertical center */
-            left: 50%;
-            /* Position the left edge at the horizontal center */
-            transform: translate(-50%, -50%);
-            /* Shift the popup back by half its width and height to truly center it */
-            background-color: rgba(0, 0, 0, 0.85);
-            border: 2px solid #FF4081;
-            border-radius: 5px;
-            padding: 8px;
-            z-index: 100;
-            box-shadow: 0 0 10px rgba(0, 174, 255, 0.5);
-            max-width: 150px;
-            text-align: center;
-            font-size: 12px;
-        }
+        */.confirmation-popup {
+    /* 位置指定を削除（絶対位置から標準のフローへ） */
+    /* position: absolute; */
+    /* top, left, transformの指定もいらなくなります */
+    
+    background-color: rgba(0, 0, 0, 0.85);
+    border: 2px solid #FF4081;
+    border-radius: 5px;
+    
+    z-index: 100; /* 必要なら残す */
+    box-shadow: 0 0 10px rgba(0, 174, 255, 0.5);
+    max-width: 200px;
+    text-align: center;
+    font-size: 14px;
+    margin: 10px auto 0;  /* 上部に余白をつけて中央に表示 */
+}
 
         .confirmation-popup .buttons {
             display: flex;
@@ -502,10 +499,13 @@
 `;
                 }
 
-                const container = document.getElementById('chairs-container');
+                // 変更前（ポップアップをイスのコンテナに追加）
+// const container = document.getElementById('chairs-container');
+// container.appendChild(popup);
 
-                // Append the popup to the container first so its dimensions can be calculated
-                container.appendChild(popup);
+// 変更後：ステータスバーの直下に追加する
+const statusBar = document.getElementById('status-text');
+statusBar.insertAdjacentElement('afterend', popup);
 
                 // ボタンにイベントリスナーを追加
                 document.getElementById('confirm-yes').addEventListener('click', function () {
