@@ -191,22 +191,32 @@
             /* Slight zoom on hover */
         }
 
-        */.confirmation-popup {
-    /* 位置指定を削除（絶対位置から標準のフローへ） */
-    /* position: absolute; */
-    /* top, left, transformの指定もいらなくなります */
-    
-    background-color: rgba(0, 0, 0, 0.85);
-    border: 2px solid #FF4081;
-    border-radius: 5px;
-    
-    z-index: 100; /* 必要なら残す */
-    box-shadow: 0 0 10px rgba(0, 174, 255, 0.5);
-    max-width: 200px;
-    text-align: center;
-    font-size: 14px;
-    margin: 10px auto 0;  /* 上部に余白をつけて中央に表示 */
-}
+        */
+
+        /* ステータスバー用コンテナ：位置計算の基準にする */
+        #status-container {
+            position: relative;
+        }
+
+        /* 確認ポップアップ：絶対配置を指定して、親コンテナの流れに影響を与えない */
+        .confirmation-popup {
+            position: absolute;
+            top: 100%;
+            /* ステータスバーの直下 */
+            left: 50%;
+            transform: translate(-50%, 10px);
+            /* 中央寄せと下に10px余白 */
+            background-color: rgba(0, 0, 0, 0.85);
+            border: 2px solid #f5e507;
+            border-radius: 5px;
+            padding: 8px;
+            z-index: 100;
+            box-shadow: 0 0 10px rgba(0, 174, 255, 0.5);
+            max-width: 400px;
+            text-align: center;
+            font-size: 14px;
+        }
+
 
         .confirmation-popup .buttons {
             display: flex;
@@ -385,8 +395,9 @@
             </tbody>
         </table>
 
-        <div class="status" id="status-text">
-            Select a chair to electrify
+        <!-- 既存のstatus-textをラッパーで囲む -->
+        <div id="status-container">
+            <div id="status-text">select a chair to electrify</div>
         </div>
 
         <div class="chairs-container" id="chairs-container"></div>
@@ -483,29 +494,38 @@
                 // フェーズに応じたメッセージを設定
                 if (gameState.currentPhase === 'trap') {
                     popup.innerHTML = `
-    <div>椅子${chairValue}を電気椅子にしますか？</div>
+    <div>${chairValue} to the electric chair?</div>
     <div class="buttons">
-        <button id="confirm-yes">はい</button>
-        <button id="confirm-no">いいえ</button>
+        <button id="confirm-yes">YES</button>
+        <button id="confirm-no">NO</button>
     </div>
 `;
                 } else {
                     popup.innerHTML = `
-    <div>椅子${chairValue}を選びますか？</div>
+    <div>Do you want to sit in ${chairValue}？</div>
     <div class="buttons">
-        <button id="confirm-yes">はい</button>
-        <button id="confirm-no">いいえ</button>
+        <button id="confirm-yes">YES</button>
+        <button id="confirm-no">NO</button>
     </div>
 `;
                 }
 
                 // 変更前（ポップアップをイスのコンテナに追加）
-// const container = document.getElementById('chairs-container');
-// container.appendChild(popup);
+                // const container = document.getElementById('chairs-container');
+                // container.appendChild(popup);
 
-// 変更後：ステータスバーの直下に追加する
-const statusBar = document.getElementById('status-text');
-statusBar.insertAdjacentElement('afterend', popup);
+                // 変更後：ステータスバーの直下に追加する
+                // handleChairClick内：popup作成後の部分
+                const statusContainer = document.getElementById('status-container');
+                const rect = statusContainer.getBoundingClientRect();
+                popup.style.position = "absolute";
+                popup.style.top = `${rect.bottom + window.scrollY + 10}px`; // ステータスバーの下から10px
+                popup.style.left = `${rect.left + rect.width / 2 + window.scrollX}px`;
+                popup.style.transform = "translateX(-50%)";
+
+                // document.body に追加する
+                document.body.appendChild(popup);
+                statusContainer.insertAdjacentElement('beforeend', popup);
 
                 // ボタンにイベントリスナーを追加
                 document.getElementById('confirm-yes').addEventListener('click', function () {
