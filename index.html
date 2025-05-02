@@ -1,5 +1,6 @@
 <!DOCTYPE html>
 <html lang="ja">
+
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
@@ -10,148 +11,259 @@
         body {
             font-family: 'Roboto Mono', monospace;
             text-align: center;
-            background-color: #121212; /* Dark Background */
-            color: #f0f0f0; /* Light Text */
+            background-color: #121212;
+            /* Dark Background */
+            color: #f0f0f0;
+            /* Light Text */
             margin: 0;
             padding: 20px;
             transition: background-color 0.3s ease, color 0.3s ease;
         }
+
         h1 {
-            color: #FF4081; /* Accent Color */
+            color: #FF4081;
+            /* Accent Color */
             text-shadow: 2px 2px 4px rgba(0, 0, 0, 0.5);
         }
+
         .game-container {
             max-width: 800px;
             margin: 0 auto;
             padding: 20px;
-            background-color: rgba(255, 255, 255, 0.05); /* Translucent White */
+            background-color: rgba(255, 255, 255, 0.05);
+            /* Translucent White */
             border-radius: 10px;
-            box-shadow: 0 0 20px rgba(0, 174, 255, 0.3); /* Neon Glow */
+            box-shadow: 0 0 20px rgba(0, 174, 255, 0.3);
+            /* Neon Glow */
             transition: background-color 0.3s ease, box-shadow 0.3s ease;
         }
+
         .status {
             font-size: 18px;
             margin: 20px 0;
             padding: 10px;
-            background-color: rgba(0, 0, 0, 0.3); /* Dark Translucent */
+            background-color: rgba(0, 0, 0, 0.3);
+            /* Dark Translucent */
             border-radius: 5px;
             transition: background-color 0.3s ease;
         }
+
         .scores {
             display: flex;
             justify-content: space-around;
             margin-bottom: 20px;
         }
+
         .player-score {
             padding: 10px 20px;
-            background-color: rgba(0, 0, 0, 0.3); /* Dark Translucent */
+            background-color: rgba(0, 0, 0, 0.3);
+            /* Dark Translucent */
             border-radius: 5px;
             font-weight: bold;
             transition: background-color 0.3s ease;
         }
+
         .player-score.active {
-            background-color: #64FFDA; /* Active Highlight */
+            background-color: #64FFDA;
+            /* Active Highlight */
             color: #222;
         }
+
         table#scoreboard {
             margin: 0 auto 20px;
             border-collapse: collapse;
-            width: 80%;
+            width: 100%;
+            /* 80%から100%に変更 */
             border: 1px solid #444;
+            font-size: 14px;
+            /* フォントサイズを小さく */
+            table-layout: fixed;
+            /* テーブルレイアウトを固定 */
+            overflow-x: auto;
+            /* 必要に応じて横スクロール */
         }
-        table#scoreboard th, table#scoreboard td {
+
+        table#scoreboard th,
+        table#scoreboard td {
             border: 1px solid #444;
-            padding: 8px 12px;
+            padding: 4px;
+            /* パディングを小さく */
             text-align: center;
+            word-break: break-word;
+            /* 長いテキストの折り返し */
         }
+
+        @media screen and (max-width: 600px) {
+            table#scoreboard {
+                font-size: 12px;
+                /* さらに小さく */
+            }
+
+            table#scoreboard th,
+            table#scoreboard td {
+                padding: 2px;
+                /* パディングをさらに小さく */
+            }
+
+            .game-container {
+                padding: 10px;
+                /* コンテナのパディングも小さく */
+            }
+        }
+
         table#scoreboard th {
             background-color: #333;
             color: #fff;
         }
+
         table#scoreboard td {
             background-color: #222;
         }
+
         /* --- Highlight Styles --- */
         table#scoreboard th.current-turn {
-            background-color: #FFD700; /* Current Turn Header Highlight */
+            background-color: #FFD700;
+            /* Current Turn Header Highlight */
             color: #222;
             font-weight: bold;
         }
+
         table#scoreboard td.current-turn {
-            background-color: #FFEB3B; /* Current Turn Cell Highlight (Slightly different yellow) */
+            background-color: #FFEB3B;
+            /* Current Turn Cell Highlight (Slightly different yellow) */
             color: #222;
             font-weight: bold;
-             box-shadow: inset 0 0 5px rgba(0,0,0,0.4); /* Inner shadow for depth */
+            box-shadow: inset 0 0 5px rgba(0, 0, 0, 0.4);
+            /* Inner shadow for depth */
         }
+
         /* --- End Highlight Styles --- */
         .chairs-container {
             display: flex;
             flex-wrap: wrap;
             justify-content: center;
-            width: 400px;
-            height: 400px;
-            margin: 20px auto; /* Added top/bottom margin */
+            width: 100%;
+            /* 固定幅から変更 */
+            max-width: 400px;
+            /* 最大幅を設定 */
+            height: 0;
+            /* 高さを0に */
+            padding-bottom: 100%;
+            /* アスペクト比を維持 */
+            margin: 20px auto;
             position: relative;
         }
+
         .chair {
-            width: 60px;
-            height: 60px;
-            /* Removed margin: 10px; position is absolute */
+            /* サイズはJavaScriptで動的に設定するので削除 */
+            /* width: 60px; */
+            /* height: 60px; */
             display: flex;
             align-items: center;
             justify-content: center;
-            font-size: 24px;
+            font-size: 20px;
+            /* フォントサイズを少し小さく */
             font-weight: bold;
             background-color: #333;
             border: 2px solid #555;
-            border-radius: 50%; /* Circle */
+            border-radius: 50%;
             cursor: pointer;
-            position: absolute; /* For circular layout */
+            position: absolute;
             transition: all 0.3s ease;
         }
+
+        @media screen and (max-width: 600px) {
+            .chair {
+                font-size: 16px;
+                /* さらに小さく */
+            }
+
+            .game-container {
+                max-width: 100%;
+                /* コンテナの最大幅を画面幅に */
+            }
+        }
+
         .chair:hover {
             background-color: #555;
-            transform: scale(1.05); /* Slight zoom on hover */
+            transform: scale(1.05);
+            /* Slight zoom on hover */
         }
+
         .chair.removed {
             visibility: hidden;
-            opacity: 0; /* Fade out */
+            opacity: 0;
+            /* Fade out */
         }
+
         .chair.shocked {
-            background-color: #FF4081; /* Shock Color */
+            background-color: #FF4081;
+            /* Shock Color */
             animation: shock 0.5s ease-in-out;
         }
+
         .chair.shocked::after {
             content: "⚡";
             font-size: 24px;
-            color: #FFD700; /* Lightning Color */
+            color: #FFD700;
+            /* Lightning Color */
             position: absolute;
-            top: -10px; /* Adjust position */
-            right: -10px; /* Adjust position */
-            animation: shock-icon-fade 1.5s ease-out forwards; /* Fade out icon */
+            top: -10px;
+            /* Adjust position */
+            right: -10px;
+            /* Adjust position */
+            animation: shock-icon-fade 1.5s ease-out forwards;
+            /* Fade out icon */
         }
 
         @keyframes shock {
-            0% { transform: scale(1) rotate(0deg); background-color: #FF4081; }
-            25% { transform: scale(1.1) rotate(-5deg); background-color: #F50057; }
-            50% { transform: scale(1.1) rotate(5deg); }
-            75% { transform: scale(1.1) rotate(-5deg); }
-            100% { transform: scale(1) rotate(0deg); background-color: #FF4081; }
+            0% {
+                transform: scale(1) rotate(0deg);
+                background-color: #FF4081;
+            }
+
+            25% {
+                transform: scale(1.1) rotate(-5deg);
+                background-color: #F50057;
+            }
+
+            50% {
+                transform: scale(1.1) rotate(5deg);
+            }
+
+            75% {
+                transform: scale(1.1) rotate(-5deg);
+            }
+
+            100% {
+                transform: scale(1) rotate(0deg);
+                background-color: #FF4081;
+            }
         }
 
         @keyframes shock-icon-fade {
-            0% { opacity: 1; transform: scale(1); }
-            100% { opacity: 0; transform: scale(1.5); }
+            0% {
+                opacity: 1;
+                transform: scale(1);
+            }
+
+            100% {
+                opacity: 0;
+                transform: scale(1.5);
+            }
         }
 
         .controls {
             margin-top: 20px;
         }
+
         button {
             padding: 10px 20px;
             font-size: 16px;
-            font-family: 'Roboto Mono', monospace; /* Match body font */
-            background-color: #333; /* Button Color */
+            font-family: 'Roboto Mono', monospace;
+            /* Match body font */
+            background-color: #333;
+            /* Button Color */
             color: rgb(250, 250, 250);
             border: none;
             border-radius: 5px;
@@ -159,30 +271,39 @@
             margin: 0 10px;
             transition: background-color 0.3s ease, transform 0.1s ease;
         }
+
         button:hover {
             background-color: #555;
-            transform: translateY(-1px); /* Slight lift on hover */
+            transform: translateY(-1px);
+            /* Slight lift on hover */
         }
-         button:active {
-             transform: translateY(1px); /* Push down on click */
-         }
+
+        button:active {
+            transform: translateY(1px);
+            /* Push down on click */
+        }
+
         button:disabled {
             background-color: #666;
             cursor: not-allowed;
-            transform: none; /* Disable hover/active effect */
+            transform: none;
+            /* Disable hover/active effect */
         }
+
         .game-over {
-            margin-top: 30px; /* Increased margin */
+            margin-top: 30px;
+            /* Increased margin */
             font-size: 24px;
             font-weight: bold;
             color: #FF4081;
             text-shadow: 2px 2px 4px rgba(0, 0, 0, 0.5);
             padding: 15px;
-            background-color: rgba(0,0,0,0.4);
+            background-color: rgba(0, 0, 0, 0.4);
             border-radius: 5px;
         }
     </style>
 </head>
+
 <body>
     <div class="game-container">
         <h1>Electric chair game</h1>
@@ -190,33 +311,46 @@
         <table id="scoreboard">
             <thead>
                 <tr>
-                    <th></th> <th>1</th> <th>2</th>
+                    <th></th>
+                    <th>1</th>
+                    <th>2</th>
                     <th>3</th>
                     <th>4</th>
                     <th>5</th>
                     <th>6</th>
                     <th>7</th>
-                    <th>8</th> <th>Total</th> <th>Shock</th> </tr>
+                    <th>8</th>
+                    <th>Total</th>
+                    <th>Shock</th>
+                </tr>
             </thead>
             <tbody>
                 <tr id="player1-row">
                     <td>Player 1</td>
-                    <td></td> <td></td>
                     <td></td>
                     <td></td>
                     <td></td>
                     <td></td>
                     <td></td>
-                    <td></td> <td>0</td> <td>0</td> </tr>
+                    <td></td>
+                    <td></td>
+                    <td></td>
+                    <td>0</td>
+                    <td>0</td>
+                </tr>
                 <tr id="player2-row">
                     <td>Player 2</td>
-                    <td></td> <td></td>
                     <td></td>
                     <td></td>
                     <td></td>
                     <td></td>
                     <td></td>
-                    <td></td> <td>0</td> <td>0</td> </tr>
+                    <td></td>
+                    <td></td>
+                    <td></td>
+                    <td>0</td>
+                    <td>0</td>
+                </tr>
             </tbody>
         </table>
 
@@ -234,7 +368,7 @@
     </div>
 
     <script>
-        document.addEventListener('DOMContentLoaded', function() {
+        document.addEventListener('DOMContentLoaded', function () {
             const gameState = {
                 chairs: [],
                 activePlayer: 1,
@@ -250,23 +384,29 @@
             };
 
             // 椅子を初期化し、円形に配置する関数
+            // initChairs関数内の椅子配置部分を修正
             function initChairs() {
                 const container = document.getElementById('chairs-container');
                 container.innerHTML = ''; // 前の椅子をクリア
                 gameState.chairs = [];
                 const totalChairs = 12;
-                const radius = 150; // 円の半径
-                const containerWidth = container.offsetWidth;
-                const containerHeight = container.offsetHeight;
-                const center = { x: containerWidth / 2, y: containerHeight / 2 };
-                const chairWidth = 60; // CSSと合わせる
-                const chairHeight = 60; // CSSと合わせる
+
+                // ここを修正：コンテナサイズを動的に計算
+                const containerSize = Math.min(400, Math.min(window.innerWidth * 0.8, window.innerHeight * 0.4));
+                container.style.width = `${containerSize}px`;
+                container.style.height = `${containerSize}px`;
+
+                const radius = containerSize * 0.4; // 円の半径を動的に計算
+                const center = { x: containerSize / 2, y: containerSize / 2 };
+
+                // 椅子のサイズも画面サイズに応じて調整
+                const chairWidth = Math.min(60, containerSize * 0.15);
+                const chairHeight = chairWidth; // 正方形を維持
 
                 for (let i = 0; i < totalChairs; i++) {
-                    // 円周上の位置を計算
-                    const chairValue = i + 1; // 1から12の椅子番号を取得
-                    // 時計の文字盤のように配置するための角度計算 (12時=PI/2, 3時=0, 6時=3PI/2, 9時=PI)
-                    const angle = (chairValue / totalChairs) * 2 * Math.PI - Math.PI / 2; // 3時(0)基準から-PI/2オフセット
+                    // 以下は同じですが、動的なサイズを使用
+                    const chairValue = i + 1;
+                    const angle = (chairValue / totalChairs) * 2 * Math.PI - Math.PI / 2;
                     const x = center.x + radius * Math.cos(angle) - chairWidth / 2;
                     const y = center.y + radius * Math.sin(angle) - chairHeight / 2;
 
@@ -275,7 +415,9 @@
                     chair.textContent = chairValue;
                     chair.style.left = `${x}px`;
                     chair.style.top = `${y}px`;
-                    chair.dataset.index = i; // インデックスを保存 (0-11)
+                    chair.style.width = `${chairWidth}px`; // 動的なサイズを設定
+                    chair.style.height = `${chairHeight}px`;
+                    chair.dataset.index = i;
 
                     chair.addEventListener('click', () => handleChairClick(i));
 
@@ -286,8 +428,7 @@
                         removed: false
                     });
                 }
-                 // ゲーム開始時のハイライト更新
-                 highlightCurrentPlayer();
+                highlightCurrentPlayer();
             }
 
             // 椅子がクリックされた時の処理
@@ -352,7 +493,7 @@
                     if (selectingPlayer === 2) {
                         // 最大ターン数に達しておらず、ゲームオーバーでない場合のみターン数をインクリメント
                         if (gameState.turnCount < 8 && !checkGameOver(true)) { // サイレントにチェック
-                           gameState.turnCount++;
+                            gameState.turnCount++;
                         }
                     }
 
@@ -371,7 +512,7 @@
                         gameState.currentPhase = 'trap'; // 次のプレイヤーはトラップを設定する必要がある
 
                         // 次のプレイヤーのトラップフェーズのステータスを更新
-                         updateStatus(`select a chair to electrify`);
+                        updateStatus(`select a chair to electrify`);
 
                         // プレイヤーとフェーズが変わった後にハイライト更新
                         highlightCurrentPlayer();
@@ -405,11 +546,11 @@
                 }
                 const cells = playerRow.getElementsByTagName('td');
 
-                 // セルインデックスが有効であることを確認
+                // セルインデックスが有効であることを確認
                 if (turnNumber >= cells.length) {
-                     console.error("Invalid cell index for turn:", turnNumber);
-                     return;
-                 }
+                    console.error("Invalid cell index for turn:", turnNumber);
+                    return;
+                }
 
                 // 特定のターン（インデックス = turnNumber）のセルを更新
                 if (shocked) {
@@ -422,12 +563,12 @@
 
                 // 合計スコア（インデックス 9）と感電回数（インデックス 10）を更新
                 // これらのインデックスはテーブル構造が一定であることを前提としています
-                 if (cells.length > 10) {
+                if (cells.length > 10) {
                     cells[9].textContent = player === 1 ? gameState.player1Score : gameState.player2Score;
                     cells[10].textContent = player === 1 ? gameState.player1Shocks : gameState.player2Shocks;
-                 } else {
-                     console.error("Scoreboard cells not found for Total/Shock update.");
-                 }
+                } else {
+                    console.error("Scoreboard cells not found for Total/Shock update.");
+                }
             }
 
             // 現在のプレイヤーのターンをハイライトする関数
@@ -447,26 +588,26 @@
                     if (headerCell) {
                         headerCell.classList.add('current-turn');
                     } else {
-                         console.warn("Could not find header cell for turn:", currentTurn);
-                     }
+                        console.warn("Could not find header cell for turn:", currentTurn);
+                    }
 
                     // 現在のターンのアクティブプレイヤーのセルをハイライト (インデックス = currentTurn)
                     const activePlayerRow = document.getElementById(`player${gameState.activePlayer}-row`);
                     if (activePlayerRow) {
                         const cells = activePlayerRow.getElementsByTagName('td');
-                         if (currentTurn < cells.length) {
+                        if (currentTurn < cells.length) {
                             const activeCell = cells[currentTurn];
                             if (activeCell) {
                                 activeCell.classList.add('current-turn');
                             } else {
-                                 console.warn("Could not find active player cell for turn:", currentTurn);
-                             }
-                         } else {
-                             console.warn("Turn index out of bounds for player row:", currentTurn);
-                         }
+                                console.warn("Could not find active player cell for turn:", currentTurn);
+                            }
+                        } else {
+                            console.warn("Turn index out of bounds for player row:", currentTurn);
+                        }
                     } else {
-                         console.warn("Could not find row for active player:", gameState.activePlayer);
-                     }
+                        console.warn("Could not find row for active player:", gameState.activePlayer);
+                    }
                 }
             }
 
@@ -483,14 +624,14 @@
                 const player1Row = document.getElementById('player1-row');
                 const player2Row = document.getElementById('player2-row');
 
-                 if (player1Row && player1Row.cells.length > 10) {
+                if (player1Row && player1Row.cells.length > 10) {
                     player1Row.cells[9].textContent = gameState.player1Score;
                     player1Row.cells[10].textContent = gameState.player1Shocks;
-                 }
-                 if (player2Row && player2Row.cells.length > 10) {
+                }
+                if (player2Row && player2Row.cells.length > 10) {
                     player2Row.cells[9].textContent = gameState.player2Score;
                     player2Row.cells[10].textContent = gameState.player2Shocks;
-                 }
+                }
             }
 
             // ゲームオーバー条件をチェックする関数
@@ -505,55 +646,55 @@
                     winnerDeclared = true;
                 } else if (gameState.player2Score >= 40) {
                     message = 'Player 2 reaches 40 points! Player 2 wins!';
-                     winnerDeclared = true;
-                // 敗北条件：感電3回
+                    winnerDeclared = true;
+                    // 敗北条件：感電3回
                 } else if (gameState.player1Shocks >= 3) {
                     message = 'Player 1 shocked 3 times! Player 2 wins!';
-                     winnerDeclared = true;
+                    winnerDeclared = true;
                 } else if (gameState.player2Shocks >= 3) {
                     message = 'Player 2 shocked 3 times! Player 1 wins!';
-                     winnerDeclared = true;
-                // 椅子が1つ以下になった場合
+                    winnerDeclared = true;
+                    // 椅子が1つ以下になった場合
                 } else if (gameState.remainingChairs <= 1) { // 変更された条件：残り椅子が1つ以下かチェック
-                     // 椅子が1つになった時点で最終スコアに基づいて勝者を決定
-                     const p1Final = gameState.player1Score;
-                     const p2Final = gameState.player2Score;
-                     if (p1Final > p2Final) {
-                         message = `Game Over! Player 1 wins with ${p1Final} points!`;
-                     } else if (p2Final > p1Final) {
-                         message = `Game Over! Player 2 wins with ${p2Final} points!`;
-                     } else {
-                         // タイブレーク：感電回数が少ない方が勝ち
-                         if (gameState.player1Shocks < gameState.player2Shocks) {
-                             message = `Game Over! Player 1 wins on tie-breaker (less shocks)!`;
-                         } else if (gameState.player2Shocks < gameState.player1Shocks) {
-                              message = `Game Over! Player 2 wins on tie-breaker (less shocks)!`;
-                         } else {
-                             message = `Game Over! It's a draw!`;
-                         }
-                     }
-                     winnerDeclared = true;
-                 // 最大ターン数（8ターン）に達した場合
-                 } else if (gameState.turnCount > 8) { // 元のゲームオーバー条件であるターン数チェックを残す
-                     // 最大ターン数に達した場合、最終スコアに基づいて勝者を決定
-                     const p1Final = gameState.player1Score;
-                     const p2Final = gameState.player2Score;
-                     if (p1Final > p1Final) { // ここが p1Final > p2Final の間違いでした
-                         message = `Game Over! Player 1 wins with ${p1Final} points!`;
-                     } else if (p2Final > p1Final) { // ここは p2Final > p1Final で正しいです
-                         message = `Game Over! Player 2 wins with ${p2Final} points!`;
-                     } else {
-                         // タイブレーク：感電回数が少ない方が勝ち
-                         if (gameState.player1Shocks < gameState.player2Shocks) {
-                             message = `Game Over! Player 1 wins on tie-breaker (less shocks)!`;
-                         } else if (gameState.player2Shocks < gameState.player1Shocks) {
-                              message = `Game Over! Player 2 wins on tie-breaker (less shocks)!`;
-                         } else {
-                             message = `Game Over! It's a draw!`;
-                         }
-                     }
-                     winnerDeclared = true;
-                 }
+                    // 椅子が1つになった時点で最終スコアに基づいて勝者を決定
+                    const p1Final = gameState.player1Score;
+                    const p2Final = gameState.player2Score;
+                    if (p1Final > p2Final) {
+                        message = `Game Over! Player 1 wins with ${p1Final} points!`;
+                    } else if (p2Final > p1Final) {
+                        message = `Game Over! Player 2 wins with ${p2Final} points!`;
+                    } else {
+                        // タイブレーク：感電回数が少ない方が勝ち
+                        if (gameState.player1Shocks < gameState.player2Shocks) {
+                            message = `Game Over! Player 1 wins on tie-breaker (less shocks)!`;
+                        } else if (gameState.player2Shocks < gameState.player1Shocks) {
+                            message = `Game Over! Player 2 wins on tie-breaker (less shocks)!`;
+                        } else {
+                            message = `Game Over! It's a draw!`;
+                        }
+                    }
+                    winnerDeclared = true;
+                    // 最大ターン数（8ターン）に達した場合
+                } else if (gameState.turnCount > 8) { // 元のゲームオーバー条件であるターン数チェックを残す
+                    // 最大ターン数に達した場合、最終スコアに基づいて勝者を決定
+                    const p1Final = gameState.player1Score;
+                    const p2Final = gameState.player2Score;
+                    if (p1Final > p1Final) { // ここが p1Final > p2Final の間違いでした
+                        message = `Game Over! Player 1 wins with ${p1Final} points!`;
+                    } else if (p2Final > p1Final) { // ここは p2Final > p1Final で正しいです
+                        message = `Game Over! Player 2 wins with ${p2Final} points!`;
+                    } else {
+                        // タイブレーク：感電回数が少ない方が勝ち
+                        if (gameState.player1Shocks < gameState.player2Shocks) {
+                            message = `Game Over! Player 1 wins on tie-breaker (less shocks)!`;
+                        } else if (gameState.player2Shocks < gameState.player1Shocks) {
+                            message = `Game Over! Player 2 wins on tie-breaker (less shocks)!`;
+                        } else {
+                            message = `Game Over! It's a draw!`;
+                        }
+                    }
+                    winnerDeclared = true;
+                }
 
 
                 if (winnerDeclared && !silentCheck) {
@@ -563,7 +704,7 @@
                     gameOverDiv.textContent = message;
                     gameOverDiv.style.display = 'block';
                     // 椅子クリックを無効にする？ (gameState.gameOver チェックで既に処理済み)
-                     highlightCurrentPlayer(); // ゲームオーバー時にハイライトをクリア
+                    highlightCurrentPlayer(); // ゲームオーバー時にハイライトをクリア
                     return true; // ゲームオーバーである
                 }
                 return winnerDeclared; // 勝利条件が満たされているか返す (サイレントでも)
@@ -592,19 +733,19 @@
 
                 // ターンごとのセル（インデックス 1から8）をクリア
                 for (let i = 1; i <= 8; i++) {
-                     if (cellsP1.length > i) cellsP1[i].textContent = '';
-                     if (cellsP2.length > i) cellsP2[i].textContent = '';
+                    if (cellsP1.length > i) cellsP1[i].textContent = '';
+                    if (cellsP2.length > i) cellsP2[i].textContent = '';
                 }
 
-                 // 合計と感電回数のセル（インデックス 9と10）をリセット
-                 if (cellsP1.length > 10) {
+                // 合計と感電回数のセル（インデックス 9と10）をリセット
+                if (cellsP1.length > 10) {
                     cellsP1[9].textContent = '0';
                     cellsP1[10].textContent = '0';
-                 }
-                  if (cellsP2.length > 10) {
+                }
+                if (cellsP2.length > 10) {
                     cellsP2[9].textContent = '0';
                     cellsP2[10].textContent = '0';
-                 }
+                }
 
                 updateStatus(`select a chair to electrify`); // 初期ステータス
                 updateScores(); // スコアが正しく表示されることを確認
@@ -619,4 +760,5 @@
         });
     </script>
 </body>
+
 </html>
