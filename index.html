@@ -347,7 +347,7 @@
 
 <body>
     <div class="game-container">
-        <h2>Electric chair game</h2>
+        <h2>電気イスゲーム</h2>
 
         <table id="scoreboard">
             <thead>
@@ -361,8 +361,8 @@
                     <th>6</th>
                     <th>7</th>
                     <th>8</th>
-                    <th>Total</th>
-                    <th>Shock</th>
+                    <th>合計</th>
+                    <th>電流</th>
                 </tr>
             </thead>
             <tbody>
@@ -494,18 +494,18 @@
                 // フェーズに応じたメッセージを設定
                 if (gameState.currentPhase === 'trap') {
                     popup.innerHTML = `
-    <div>${chairValue} to the electric chair?</div>
+    <div>${chairValue}に電流を仕掛けますか?</div>
     <div class="buttons">
-        <button id="confirm-yes">YES</button>
-        <button id="confirm-no">NO</button>
+        <button id="confirm-yes">はい</button>
+        <button id="confirm-no">いいえ</button>
     </div>
 `;
                 } else {
                     popup.innerHTML = `
-    <div>Do you want to sit in ${chairValue}？</div>
+    <div>${chairValue}に座りますか？</div>
     <div class="buttons">
-        <button id="confirm-yes">YES</button>
-        <button id="confirm-no">NO</button>
+        <button id="confirm-yes">はい</button>
+        <button id="confirm-no">いいえ</button>
     </div>
 `;
                 }
@@ -551,7 +551,7 @@
                 if (gameState.currentPhase === 'trap') {
                     // トラップ設定フェーズ
                     gameState.trappedChairIndex = index;
-                    updateStatus(`choose a chair`);
+                    updateStatus(`座る椅子を選んでください`);
                     gameState.currentPhase = 'choose';
                 } else if (gameState.currentPhase === 'choose') {
                     // 椅子選択フェーズ（既存の処理と同じ）
@@ -566,11 +566,11 @@
                         if (selectingPlayer === 1) {
                             gameState.player1Score = 0;
                             gameState.player1Shocks++;
-                            updateStatus(`electrocuted! Score reset.`);
+                            updateStatus(`電流!! スコアはリセット！`);
                         } else {
                             gameState.player2Score = 0;
                             gameState.player2Shocks++;
-                            updateStatus(`electrocuted! Score reset.`);
+                            updateStatus(`電流!! スコアはリセット！`);
                         }
 
                         setTimeout(() => {
@@ -581,10 +581,10 @@
                     } else {
                         if (selectingPlayer === 1) {
                             gameState.player1Score += points;
-                            updateStatus(`gained ${points} points!`);
+                            updateStatus(`${points}点獲得!`);
                         } else {
                             gameState.player2Score += points;
-                            updateStatus(`gained ${points} points!`);
+                            updateStatus(`${points}点獲得!`);
                         }
                         selectedChair.removed = true;
                         selectedChair.element.classList.add('removed');
@@ -606,7 +606,7 @@
                         resetChairEffects();
                         gameState.activePlayer = selectingPlayer === 1 ? 2 : 1;
                         gameState.currentPhase = 'trap';
-                        updateStatus(`select a chair to electrify`);
+                        updateStatus(`電流を仕掛けてください`);
                         highlightCurrentPlayer();
                     }, 1500);
                 }
@@ -839,7 +839,7 @@
                     cellsP2[10].textContent = '0';
                 }
 
-                updateStatus(`select a chair to electrify`); // 初期ステータス
+                updateStatus(`電流を仕掛けてください`); // 初期ステータス
                 updateScores(); // スコアが正しく表示されることを確認
                 initChairs(); // 椅子を初期化し、highlightCurrentPlayerを呼び出す
             }
