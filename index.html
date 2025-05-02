@@ -137,7 +137,6 @@
             /* Inner shadow for depth */
         }
 
-        /* --- End Highlight Styles --- */
         .chairs-container {
             display: flex;
             flex-wrap: wrap;
@@ -151,6 +150,8 @@
             padding-bottom: 100%;
             /* アスペクト比を維持 */
             margin: 20px auto;
+            margin-top: 100px;
+            /* Add this line to push the container down */
             position: relative;
         }
 
@@ -184,10 +185,43 @@
             }
         }
 
-        .chair:hover {
+        /* .chair:hover {
             background-color: #555;
             transform: scale(1.05);
             /* Slight zoom on hover */
+        }
+
+        */ .confirmation-popup {
+            position: absolute;
+            /* Ensure it's positioned relative to the nearest positioned ancestor (.chairs-container) */
+            top: 50%;
+            /* Position the top edge at the vertical center */
+            left: 50%;
+            /* Position the left edge at the horizontal center */
+            transform: translate(-50%, -50%);
+            /* Shift the popup back by half its width and height to truly center it */
+            background-color: rgba(0, 0, 0, 0.85);
+            border: 2px solid #FF4081;
+            border-radius: 5px;
+            padding: 8px;
+            z-index: 100;
+            box-shadow: 0 0 10px rgba(0, 174, 255, 0.5);
+            max-width: 150px;
+            text-align: center;
+            font-size: 12px;
+        }
+
+        .confirmation-popup .buttons {
+            display: flex;
+            justify-content: space-around;
+            margin-top: 5px;
+        }
+
+        .confirmation-popup button {
+            padding: 3px 8px;
+            font-size: 11px;
+            background-color: #333;
+            border: 1px solid #64FFDA;
         }
 
         .chair.removed {
@@ -432,51 +466,99 @@
             }
 
             // 椅子がクリックされた時の処理
+            // 椅子がクリックされた時の処理
             function handleChairClick(index) {
                 // ゲームオーバーか、既に削除された椅子なら何もしない
                 if (gameState.gameOver || gameState.chairs[index].removed) return;
 
+                // 既存のポップアップを削除
+                removeConfirmationPopup();
+
+                // 椅子の要素と値を取得
+                const chairElement = gameState.chairs[index].element; // This line is no longer strictly needed for positioning but can remain
+                const chairValue = gameState.chairs[index].value;
+
+                // 確認ポップアップを作成
+                const popup = document.createElement('div');
+                popup.className = 'confirmation-popup';
+                popup.id = 'confirmation-popup';
+
+                // フェーズに応じたメッセージを設定
+                if (gameState.currentPhase === 'trap') {
+                    popup.innerHTML = `
+    <div>椅子${chairValue}を電気椅子にしますか？</div>
+    <div class="buttons">
+        <button id="confirm-yes">はい</button>
+        <button id="confirm-no">いいえ</button>
+    </div>
+`;
+                } else {
+                    popup.innerHTML = `
+    <div>椅子${chairValue}を選びますか？</div>
+    <div class="buttons">
+        <button id="confirm-yes">はい</button>
+        <button id="confirm-no">いいえ</button>
+    </div>
+`;
+                }
+
+                const container = document.getElementById('chairs-container');
+
+                // Append the popup to the container first so its dimensions can be calculated
+                container.appendChild(popup);
+
+                // ボタンにイベントリスナーを追加
+                document.getElementById('confirm-yes').addEventListener('click', function () {
+                    removeConfirmationPopup();
+                    processChairSelection(index);
+                });
+
+                document.getElementById('confirm-no').addEventListener('click', function () {
+                    removeConfirmationPopup();
+                });
+            }
+
+
+
+
+            function removeConfirmationPopup() {
+                const existingPopup = document.getElementById('confirmation-popup');
+                if (existingPopup) {
+                    existingPopup.remove();
+                }
+            }
+            function processChairSelection(index) {
                 if (gameState.currentPhase === 'trap') {
                     // トラップ設定フェーズ
                     gameState.trappedChairIndex = index;
-                    // トラップはサイレントに設定し、選択プレイヤーへのステータスを更新
                     updateStatus(`choose a chair`);
                     gameState.currentPhase = 'choose';
-                    // オプション：トラップ設定プレイヤーが完了したことを視覚的に示す？
                 } else if (gameState.currentPhase === 'choose') {
-                    // 椅子選択フェーズ
+                    // 椅子選択フェーズ（既存の処理と同じ）
                     const selectedChair = gameState.chairs[index];
                     const isTrapped = index === gameState.trappedChairIndex;
                     const selectingPlayer = gameState.activePlayer;
                     const points = selectedChair.value;
-                    const turnToRecord = gameState.turnCount; // ★ スコア記録用のターン番号を保持
+                    const turnToRecord = gameState.turnCount;
 
                     if (isTrapped) {
-                        // トラップされた椅子を選択した場合
                         selectedChair.element.classList.add('shocked');
                         if (selectingPlayer === 1) {
-                            gameState.player1Score = 0; // スコアをリセット
+                            gameState.player1Score = 0;
                             gameState.player1Shocks++;
                             updateStatus(`electrocuted! Score reset.`);
                         } else {
-                            gameState.player2Score = 0; // スコアをリセット
+                            gameState.player2Score = 0;
                             gameState.player2Shocks++;
                             updateStatus(`electrocuted! Score reset.`);
                         }
 
-                        // アニメーションと遅延の後、感電効果を削除
                         setTimeout(() => {
                             if (selectedChair.element) {
                                 selectedChair.element.classList.remove('shocked');
-                                // オプション：感電後、椅子を削除するか表示したままにするか？
-                                // 削除する場合：
-                                // selectedChair.removed = true;
-                                // selectedChair.element.classList.add('removed');
-                                // gameState.remainingChairs--;
                             }
-                        }, 1500); // アニメーションより少し長く表示
+                        }, 1500);
                     } else {
-                        // トラップされていない椅子を選択した場合
                         if (selectingPlayer === 1) {
                             gameState.player1Score += points;
                             updateStatus(`gained ${points} points!`);
@@ -484,39 +566,29 @@
                             gameState.player2Score += points;
                             updateStatus(`gained ${points} points!`);
                         }
-                        selectedChair.removed = true; // 椅子を削除済みに設定
-                        selectedChair.element.classList.add('removed'); // 削除済みクラスを追加
-                        gameState.remainingChairs--; // 残り椅子数を減らす
+                        selectedChair.removed = true;
+                        selectedChair.element.classList.add('removed');
+                        gameState.remainingChairs--;
                     }
 
-                    // ★ プレイヤー2が選択完了したらターンを進める
                     if (selectingPlayer === 2) {
-                        // 最大ターン数に達しておらず、ゲームオーバーでない場合のみターン数をインクリメント
-                        if (gameState.turnCount < 8 && !checkGameOver(true)) { // サイレントにチェック
+                        if (gameState.turnCount < 8 && !checkGameOver(true)) {
                             gameState.turnCount++;
                         }
                     }
 
-                    // ★ スコアボード更新時に記録用ターン番号を渡す
                     updateScoreboard(selectingPlayer, points, isTrapped, turnToRecord);
-                    updateScores(); // 合計スコア表示を更新
+                    updateScores();
 
-                    // プレイヤーとフェーズを切り替える前に遅延
                     setTimeout(() => {
-                        // スコア更新後、再度ゲームオーバー条件をチェック
                         if (checkGameOver()) return;
 
-                        resetChairEffects(); // 必要に応じて感電効果がクリアされていることを確認
-
-                        gameState.activePlayer = selectingPlayer === 1 ? 2 : 1; // プレイヤーを切り替え
-                        gameState.currentPhase = 'trap'; // 次のプレイヤーはトラップを設定する必要がある
-
-                        // 次のプレイヤーのトラップフェーズのステータスを更新
+                        resetChairEffects();
+                        gameState.activePlayer = selectingPlayer === 1 ? 2 : 1;
+                        gameState.currentPhase = 'trap';
                         updateStatus(`select a chair to electrify`);
-
-                        // プレイヤーとフェーズが変わった後にハイライト更新
                         highlightCurrentPlayer();
-                    }, 1500); // 遅延時間
+                    }, 1500);
                 }
             }
 
